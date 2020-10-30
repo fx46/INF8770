@@ -3,6 +3,30 @@ import numpy as np
 import math
 import pywt
 
+def sousEchantillonnage(img_yuv):
+    width = len(img_yuv)
+    height = len(img_yuv[0])
+    Y = [[0]*width]*height
+    U = [[0]*(width/2)]*(height/2)
+    V = [[0]*(width/2)]*(height/2)
+    for column in range(width):
+        if column%2 == 0:
+            for row in range(height):
+                pixel = img_yuv[column][row]
+                Y[column][row] = pixel[0]
+                if row % 2 == 0:
+                    U[column/2][row/2] = pixel[1]
+                    V[column/2][row/2] = pixel[2]
+        else:   
+            for row in range(height):
+                pixel = img_yuv[column][row]
+                Y[column][row] = pixel[0]
+            
+    print(Y.size())
+    print(V.size())
+    print(U.size())
+    return Y, U, V
+
 def convertImageToYUV(img_rgb):
     YUV = img_rgb
     width = len(img_rgb)
@@ -69,7 +93,12 @@ img_YUV = convertImageToYUV(img_original)
 im[0][1].imshow(img_YUV)
 im[0][1].set_title("Image YUV")
 
-fig.delaxes(im[0][2])
+sousEchantillonnage(img_YUV.copy())
+
+img_RGB = convertImageToRGB(img_YUV.copy())
+im[0][2].imshow(img_RGB)
+im[0][2].set_title("Image RGB")
+
 fig.delaxes(im[0][3])
 
 A = img_YUV.copy()
@@ -152,3 +181,8 @@ dictionnaire = np.transpose([dictsymb,dictbin])
 print(dictionnaire) 
 print("Longueur = {0}".format(longueur))
 print("Longueur originale = {0}".format(longueurOriginale))
+
+##############################################################################################
+#  Taux de compression
+##############################################################################################
+print("Taux de compression")
