@@ -19,27 +19,27 @@ def convertImageToYUV(img_rgb):
     return YUV
 
 def DWT(img_YUV):
-    cAr, (cHr, cVr, cDr) = pywt.dwt2(img_YUV[:, :, 0], 'haar')
-    cAg, (cHg, cVg, cDg) = pywt.dwt2(img_YUV[:, :, 1], 'haar')
-    cAb, (cHb, cVb, cDb) = pywt.dwt2(img_YUV[:, :, 2], 'haar')
+    cAy, (cHy, cVy, cDy) = pywt.dwt2(img_YUV[:, :, 0], 'haar')
+    cAu, (cHu, cVu, cDu) = pywt.dwt2(img_YUV[:, :, 1], 'haar')
+    cAv, (cHv, cVv, cDv) = pywt.dwt2(img_YUV[:, :, 2], 'haar')
 
-    A = np.zeros((len(cAr), len(cAr[0]), 3))
-    H = np.zeros((len(cHr), len(cHr[0]), 3))
-    V = np.zeros((len(cVr), len(cVr[0]), 3))
-    D = np.zeros((len(cDr), len(cDr[0]), 3))
+    A = np.zeros((len(cAy), len(cAy[0]), 3))
+    H = np.zeros((len(cHy), len(cHy[0]), 3))
+    V = np.zeros((len(cVy), len(cVy[0]), 3))
+    D = np.zeros((len(cDy), len(cDy[0]), 3))
 
-    A[:,:,0] = cAr
-    A[:,:,1] = cAg
-    A[:,:,2] = cAb
-    H[:,:,0] = cHr
-    H[:,:,1] = cHg
-    H[:,:,2] = cHb
-    V[:,:,0] = cVr
-    V[:,:,1] = cVg
-    V[:,:,2] = cVb
-    D[:,:,0] = cDr
-    D[:,:,1] = cDg
-    D[:,:,2] = cDb
+    A[:,:,0] = cAy
+    A[:,:,1] = cAu
+    A[:,:,2] = cAv
+    H[:,:,0] = cHy
+    H[:,:,1] = cHu
+    H[:,:,2] = cHv
+    V[:,:,0] = cVy
+    V[:,:,1] = cVu
+    V[:,:,2] = cVv
+    D[:,:,0] = cDy
+    D[:,:,1] = cDu
+    D[:,:,2] = cDv
 
     return A, H, V, D
 
