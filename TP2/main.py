@@ -46,7 +46,7 @@ def DWT(img_YUV):
 DWT_recursion_level = 3
 
 img_original = plt.imread('dank_luigi.jpeg').astype('int')
-fig, (im) = plt.subplots(4, DWT_recursion_level + 1)
+fig, (im) = plt.subplots(DWT_recursion_level + 1, 4)
 
 im[0][0].imshow(img_original)
 im[0][0].set_title("Image originale RGB")
