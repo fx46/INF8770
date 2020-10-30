@@ -41,30 +41,34 @@ def DWT(img_YUV):
     D[:,:,1] = cDg
     D[:,:,2] = cDb
 
-    im[0].imshow(A)
-
     return A, H, V, D
 
+DWT_recursion_level = 3
 
 img_original = plt.imread('dank_luigi.jpeg').astype('int')
-fig, (im) = plt.subplots(1,6)
+fig, (im) = plt.subplots(4, DWT_recursion_level + 1)
 
-im[0].imshow(img_original)
-im[0].set_title("Image originale RGB")
+im[0][0].imshow(img_original)
+im[0][0].set_title("Image originale RGB")
 
 img_YUV = convertImageToYUV(img_original)
-im[1].imshow(img_YUV)
-im[1].set_title("Image YUV")
+im[0][1].imshow(img_YUV)
+im[0][1].set_title("Image YUV")
 
-A, H, V, D = DWT(img_YUV)
+fig.delaxes(im[0][2])
+fig.delaxes(im[0][3])
 
-im[2].imshow(A)
-im[2].set_title("Approximation Coeff")
-im[3].imshow(H)
-im[3].set_title("Horizontal")
-im[4].imshow(V)
-im[4].set_title("Vertical")
-im[5].imshow(D)
-im[5].set_title("Diagonal")
+A = img_YUV
+for i in range(DWT_recursion_level):
+    A, H, V, D = DWT(A)
+    
+    im[1 + i][0].imshow(A)
+    im[1 + i][0].set_title("Approximation Coeff " + str(i + 1))
+    im[1 + i][1].imshow(H)
+    im[1 + i][1].set_title("Horizontal " + str(i + 1))
+    im[1 + i][2].imshow(V)
+    im[1 + i][2].set_title("Vertical " + str(i + 1))
+    im[1 + i][3].imshow(D)
+    im[1 + i][3].set_title("Diagonal " + str(i + 1))
 
 plt.show()
