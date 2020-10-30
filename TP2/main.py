@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import math
 import pywt
 import cv2
 
@@ -17,6 +18,20 @@ def convertImageToYUV(img_rgb):
             ]
 
     return YUV
+
+def convertImageToRGB(img_yuv):
+    RGB = img_yuv
+    width = len(img_yuv)
+    height = len(img_yuv[0])
+    for column in range(width):
+        for row in range(height):
+            pixel = img_yuv[column][row]
+            G = np.clip(pixel[0] - (pixel[1] + pixel[2]) / 4, 0, 255)
+            R = np.clip(pixel[2] + G, 0, 255)
+            B = np.clip(pixel[1] + G, 0, 255)
+            RGB[column][row] = [R, G, B]
+
+    return RGB
 
 def DWT(img_YUV):
     cAy, (cHy, cVy, cDy) = pywt.dwt2(img_YUV[:, :, 0], 'haar')
