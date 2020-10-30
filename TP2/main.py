@@ -100,3 +100,55 @@ for column in range(width):
             oneDimensionalImage.append(A[column][row][color])
             
 print(oneDimensionalImage)
+
+##############################################################################################
+#  LZW
+##############################################################################################
+dictsymb =[oneDimensionalImage[0]]
+dictbin = ["{:b}".format(0)]
+nbsymboles = 1
+for i in range(1,len(oneDimensionalImage)):
+    if oneDimensionalImage[i] not in dictsymb:
+        dictsymb += [oneDimensionalImage[i]]
+        dictbin += ["{:b}".format(nbsymboles)] 
+        nbsymboles +=1
+        
+longueurOriginale = np.ceil(np.log2(nbsymboles))*len(oneDimensionalImage)    
+
+for i in range(nbsymboles):
+    dictbin[i] = "{:b}".format(i).zfill(int(np.ceil(np.log2(nbsymboles))))
+        
+dictsymb.sort()
+dictionnaire = np.transpose([dictsymb,dictbin])
+print(dictionnaire) 
+
+i=0
+MessageCode = []
+longueur = 0
+while i < len(oneDimensionalImage):
+    precsouschaine = oneDimensionalImage[i] 
+    souschaine = oneDimensionalImage[i] 
+    
+    while souschaine in dictsymb and i < len(oneDimensionalImage):
+        i += 1
+        precsouschaine = souschaine
+        if i < len(oneDimensionalImage):
+            souschaine += oneDimensionalImage[i]  
+
+    codebinaire = [dictbin[dictsymb.index(precsouschaine)]]
+    MessageCode += codebinaire
+    longueur += len(codebinaire[0]) 
+    if i < len(oneDimensionalImage):
+        dictsymb += [souschaine]
+        dictbin += ["{:b}".format(nbsymboles)] 
+        nbsymboles +=1
+    
+    if np.ceil(np.log2(nbsymboles)) > len(MessageCode[-1]):
+        for j in range(nbsymboles):
+            dictbin[j] = "{:b}".format(j).zfill(int(np.ceil(np.log2(nbsymboles))))
+
+print(MessageCode)
+dictionnaire = np.transpose([dictsymb,dictbin])
+print(dictionnaire) 
+print("Longueur = {0}".format(longueur))
+print("Longueur originale = {0}".format(longueurOriginale))
