@@ -93,7 +93,7 @@ img_YUV = convertImageToYUV(img_original)
 im[0][1].imshow(img_YUV)
 im[0][1].set_title("Image YUV")
 
-sousEchantillonnage(img_YUV.copy())
+#sousEchantillonnage(img_YUV.copy())
 
 img_RGB = convertImageToRGB(img_YUV.copy())
 im[0][2].imshow(img_RGB)
@@ -176,13 +176,7 @@ while i < len(oneDimensionalImage):
         for j in range(nbsymboles):
             dictbin[j] = "{:b}".format(j).zfill(int(np.ceil(np.log2(nbsymboles))))
 
-print(MessageCode)
-dictionnaire = np.transpose([dictsymb,dictbin])
-print(dictionnaire) 
-print("Longueur = {0}".format(longueur))
-print("Longueur originale = {0}".format(longueurOriginale))
-
 ##############################################################################################
 #  Taux de compression
 ##############################################################################################
-print("Taux de compression")
+print("Taux de compression = {0}".format(1 - longueur / longueurOriginale))
