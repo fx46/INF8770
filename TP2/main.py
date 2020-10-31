@@ -6,9 +6,9 @@ import os
 
 def sousEchantillonnage(img_yuv):
     # downsample to 4 : 2 : 0 format
-    y = img_YUV[:, :, 0]
-    u = img_YUV[:, :, 1][::2]
-    v = img_YUV[:, :, 2][::2]
+    y = img_yuv[:, :, 0]
+    u = img_yuv[:, :, 1][::4]
+    v = img_yuv[:, :, 2][::4]
 
     return y, u, v
 
@@ -34,9 +34,9 @@ def convertImageToRGB(y, u, v):
     for column in range(width):
         RGB.append([])
         for row in range(height):
-            G = np.clip(y[column][row] - (u[column//2][row] + v[column//2][row]) / 4, 0, 255).astype(np.uint8)
-            R = np.clip(v[column//2][row] + G, 0, 255).astype(np.uint8)
-            B = np.clip(u[column//2][row] + G, 0, 255).astype(np.uint8)
+            G = np.clip(y[column][row] - (u[column//4][row] + v[column//4][row]) / 4, 0, 255).astype(np.uint8)
+            R = np.clip(v[column//4][row] + G, 0, 255).astype(np.uint8)
+            B = np.clip(u[column//4][row] + G, 0, 255).astype(np.uint8)
             RGB[column].append([R, G, B])
 
     return RGB
@@ -45,6 +45,14 @@ def DWT(y, u, v):
     cAy, (cHy, cVy, cDy) = pywt.dwt2(y, 'haar')
     cAu, (cHu, cVu, cDu) = pywt.dwt2(u, 'haar')
     cAv, (cHv, cVv, cDv) = pywt.dwt2(v, 'haar')
+
+    return cAy, cAu, cAv
+
+def iDWT(y, u, v):
+    #TODO fix this
+    cAy, (cHy, cVy, cDy) = pywt.idwt2(y, 'haar')
+    cAu, (cHu, cVu, cDu) = pywt.idwt2(u, 'haar')
+    cAv, (cHv, cVv, cDv) = pywt.idwt2(v, 'haar')
 
     return cAy, cAu, cAv
 
@@ -152,30 +160,17 @@ while i < len(oneDimensionalImage):
 print("Taux de compression = {0}".format(1 - longueur / longueurOriginale))
 
 ##############################################################################################
-#  LWZ to 1D array
-##############################################################################################
-decoded_1D_image = []
-#TODO
-
-
-##############################################################################################
-# 2D array
-##############################################################################################
-#TODO
-
-
-##############################################################################################
 # Inverse DWT
 ##############################################################################################
-#TODO
-#use pywt.idwt2
+#for i in range(DWT_recursion_level):
+#    y, u, v = iDWT(y, u, v)
 
 ##############################################################################################
 #  YUV to RGB
 ##############################################################################################
 img_RGB = convertImageToRGB(y, u, v)
 im[0][2].imshow(img_RGB)
-im[0][2].set_title("Image RGB")
+im[0][2].set_title("Image RGB DWT lvl: " + str(DWT_recursion_level))
 
 ##############################################################################################
 #  plt 
