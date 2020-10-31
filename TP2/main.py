@@ -5,6 +5,29 @@ import pywt
 import os
 
 def sousEchantillonnage(img_yuv):
+    #width = len(img_yuv)
+    #height = len(img_yuv[0])
+    #Y = [[0]*width]*height
+    #U = [[0]*(width/2)]*(height/2)
+    #V = [[0]*(width/2)]*(height/2)
+    #for column in range(width):
+    #    if column%2 == 0:
+    #        for row in range(height):
+    #            pixel = img_yuv[column][row]
+    #            Y[column][row] = pixel[0]
+    #            if row % 2 == 0:
+    #                U[column/2][row/2] = pixel[1]
+    #                V[column/2][row/2] = pixel[2]
+    #    else:   
+    #        for row in range(height):
+    #            pixel = img_yuv[column][row]
+    #            Y[column][row] = pixel[0]
+    #        
+    #print(Y.size())
+    #print(V.size())
+    #print(U.size())
+    #return Y, U, V
+
     # downsample to 4 : 2 : 0 format
     y = img_yuv[:, :, 0]
     u = img_yuv[:, :, 1][::4]
