@@ -120,7 +120,7 @@ for column in range(len(v)):
         oneDimensionalImage.append(v[column][row])
 
 ##############################################################################################
-#  1D array to LZW
+#  1D array to LZW source: https://github.com/gabilodeau/INF8770
 ##############################################################################################
 dictsymb =[oneDimensionalImage[0]]
 dictbin = ["{:b}".format(0)]
