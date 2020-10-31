@@ -5,33 +5,15 @@ import pywt
 import os
 
 def sousEchantillonnage(img_yuv):
-    #width = len(img_yuv)
-    #height = len(img_yuv[0])
-    #Y = [[0]*width]*height
-    #U = [[0]*(width/2)]*(height/2)
-    #V = [[0]*(width/2)]*(height/2)
-    #for column in range(width):
-    #    if column%2 == 0:
-    #        for row in range(height):
-    #            pixel = img_yuv[column][row]
-    #            Y[column][row] = pixel[0]
-    #            if row % 2 == 0:
-    #                U[column/2][row/2] = pixel[1]
-    #                V[column/2][row/2] = pixel[2]
-    #    else:   
-    #        for row in range(height):
-    #            pixel = img_yuv[column][row]
-    #            Y[column][row] = pixel[0]
-    #        
-    #print(Y.size())
-    #print(V.size())
-    #print(U.size())
-    #return Y, U, V
-
-    # downsample to 4 : 2 : 0 format
     y = img_yuv[:, :, 0]
-    u = img_yuv[:, :, 1][::4]
-    v = img_yuv[:, :, 2][::4]
+
+    u = img_yuv[:, :, 1]
+    u = np.delete(u, list(range(0, u.shape[0], 2)), axis=1) #delete every other line
+    u = u[::2] #delete every other column
+
+    v = img_yuv[:, :, 2]
+    v = np.delete(v, list(range(0, v.shape[0], 2)), axis=1) #delete every other line
+    v = v[::2] #delete every other column
 
     return y, u, v
 
@@ -57,9 +39,10 @@ def convertImageToRGB(y, u, v):
     for column in range(width):
         RGB.append([])
         for row in range(height):
-            G = np.clip(y[column][row] - (u[column//4][row] + v[column//4][row]) / 4, 0, 255).astype(np.uint8)
-            R = np.clip(v[column//4][row] + G, 0, 255).astype(np.uint8)
-            B = np.clip(u[column//4][row] + G, 0, 255).astype(np.uint8)
+            # u and v are read with //2 for column and //2 for rows because of the 4:2:0 format
+            G = np.clip(y[column][row] - (u[column//2][row//2] + v[column//2][row//2]) / 4, 0, 255).astype(np.uint8)
+            R = np.clip(v[column//2][row//2] + G, 0, 255).astype(np.uint8)
+            B = np.clip(u[column//2][row//2] + G, 0, 255).astype(np.uint8)
             RGB[column].append([R, G, B])
 
     return RGB
