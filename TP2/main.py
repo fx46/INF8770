@@ -178,7 +178,7 @@ for i in range(DWT_recursion_level):
 ##############################################################################################
 img_RGB = convertImageToRGB(y, u, v)
 im[2].imshow(img_RGB)
-im[2].set_title("Image RGB DWT lvl: " + str(DWT_recursion_level))
+im[2].set_title("Image RGB DWT lvl: " + str(DWT_recursion_level) + "\nTaux compression: \n" + str(1 - longueur / longueurOriginale))
 
 ##############################################################################################
 #  plt 
