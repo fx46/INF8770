@@ -70,17 +70,17 @@ image_path = 'dank_luigi.jpeg'
 img_original = plt.imread(image_path).astype('int')
 longueurOriginale = os.stat(image_path).st_size * 8
 
-fig, (im) = plt.subplots(2, 4)
+fig, (im) = plt.subplots(1, 3)
 
-im[0][0].imshow(img_original)
-im[0][0].set_title("Image originale RGB")
+im[0].imshow(img_original)
+im[0].set_title("Image originale RGB")
 
 ##############################################################################################
 # RGB to YUV
 ##############################################################################################
 img_YUV = convertImageToYUV(img_original)
-im[0][1].imshow(img_YUV)
-im[0][1].set_title("Image YUV")
+im[1].imshow(img_YUV)
+im[1].set_title("Image YUV")
 
 y = img_YUV[:, :, 0]
 u = img_YUV[:, :, 1]
@@ -177,8 +177,8 @@ for i in range(DWT_recursion_level):
 #  YUV to RGB
 ##############################################################################################
 img_RGB = convertImageToRGB(y, u, v)
-im[0][2].imshow(img_RGB)
-im[0][2].set_title("Image RGB DWT lvl: " + str(DWT_recursion_level))
+im[2].imshow(img_RGB)
+im[2].set_title("Image RGB DWT lvl: " + str(DWT_recursion_level))
 
 ##############################################################################################
 #  plt 
