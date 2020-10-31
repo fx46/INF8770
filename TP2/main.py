@@ -65,24 +65,23 @@ def convertImageToRGB(y, u, v):
     return RGB
 
 def DWT(y, u, v):
-    cAy, (cHy, cVy, cDy) = pywt.dwt2(y, 'haar')
-    cAu, (cHu, cVu, cDu) = pywt.dwt2(u, 'haar')
-    cAv, (cHv, cVv, cDv) = pywt.dwt2(v, 'haar')
+    cAy, _ = pywt.dwt2(y, 'haar')
+    cAu, _ = pywt.dwt2(u, 'haar')
+    cAv, _ = pywt.dwt2(v, 'haar')
 
     return cAy, cAu, cAv
 
 def iDWT(y, u, v):
-    #TODO fix this
-    cAy, (cHy, cVy, cDy) = pywt.idwt2(y, 'haar')
-    cAu, (cHu, cVu, cDu) = pywt.idwt2(u, 'haar')
-    cAv, (cHv, cVv, cDv) = pywt.idwt2(v, 'haar')
+    cAy = pywt.idwt2((y, (None, None, None)), 'haar')
+    cAu = pywt.idwt2((u, (None, None, None)), 'haar')
+    cAv = pywt.idwt2((v, (None, None, None)), 'haar')
 
     return cAy, cAu, cAv
 
 ##############################################################################################
 # Load image
 ##############################################################################################
-DWT_recursion_level = 1
+DWT_recursion_level = 3
 image_path = 'dank_luigi.jpeg'
 
 img_original = plt.imread(image_path).astype('int')
@@ -112,6 +111,9 @@ y, u, v = sousEchantillonnage(img_YUV.copy())
 ##############################################################################################
 # DWT
 ##############################################################################################
+coeffsY = []
+coeffsU = []
+coeffsV = []
 for i in range(DWT_recursion_level):
     y, u, v = DWT(y, u, v)
 
@@ -185,8 +187,8 @@ print("Taux de compression = {0}".format(1 - longueur / longueurOriginale))
 ##############################################################################################
 # Inverse DWT
 ##############################################################################################
-#for i in range(DWT_recursion_level):
-#    y, u, v = iDWT(y, u, v)
+for i in range(DWT_recursion_level):
+    y, u, v = iDWT(y, u, v)
 
 ##############################################################################################
 #  YUV to RGB
