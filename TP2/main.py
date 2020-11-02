@@ -27,7 +27,7 @@ def convertImageToYUV(img_rgb):
             YUV[column][row] = [
                 (pixel[0] + 2 * pixel[1] + pixel[2]) / 4, 
                 pixel[2] - pixel[1], 
-                pixel[0] - pixel[2]
+                pixel[0] - pixel[1]
             ]
 
     return YUV
