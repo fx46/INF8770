@@ -3,7 +3,7 @@ import cv2
 vidcap = cv2.VideoCapture('data/video/v01.mp4')
 fps = vidcap.get(cv2.CAP_PROP_FPS)
 
-img = cv2.imread('data/png/i001.png') 
+img = cv2.imread('data/jpeg/i001.jpeg') 
 average_img = img.mean(axis=0).mean(axis=0)
 
 allTimeLow = 999999
