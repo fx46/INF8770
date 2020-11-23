@@ -1,13 +1,16 @@
 import cv2
+import time
 
 vidcap = cv2.VideoCapture('data/video/v01.mp4')
 fps = vidcap.get(cv2.CAP_PROP_FPS)
 
-img = cv2.imread('data/jpeg/i001.jpeg') 
+img = cv2.imread('data/png/i001.png') 
 average_img = img.mean(axis=0).mean(axis=0)
 
-allTimeLow = 999999
+allTimeLow = 100
 frameNum = 0
+
+start_time = time.time()
 
 while True:
     frameNum = frameNum + 1
@@ -15,6 +18,8 @@ while True:
 
     if not success:
         print("done!")
+        print("did not find")
+        print("--- %s seconds ---" % (time.time() - start_time))
         break
 
     result = cv2.subtract(img,frame)
@@ -23,5 +28,11 @@ while True:
     brightness = sum(average_result)
 
     if brightness < allTimeLow:
-        print("new low: " + str(brightness) + ", at frame: " + str(frameNum) + ", at second: " + str(frameNum / fps))
+        
         allTimeLow = brightness
+
+        if allTimeLow <= 1.0: # close enough to zero
+            print("done!")
+            print("At frame: " + str(frameNum) + ", at second: " + str(frameNum / fps))
+            print("--- %s seconds ---" % (time.time() - start_time))
+            break
