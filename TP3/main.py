@@ -216,6 +216,7 @@ for imgNum in range(1, 201):
     if not found:
         print("not found!")
         print("--- %s seconds ---" % (time.time() - start_time))
-        sheet.write(imgNum, 0, "not found")
+        sheet.write(imgNum, 0, "%s" % (time.time() - start_time))
+        sheet.write(imgNum, 1, "video: " + str(vidNum))
 
 book.save("tempsAlice.xls")
