@@ -48,6 +48,7 @@ for imgNum in range(1, 201):
     fps = vidcap.get(cv2.CAP_PROP_FPS)
     frameNum = 0
     found = False
+    allTimeLow = 10000
 
     while True:
         frameNum = frameNum + 1
@@ -66,7 +67,7 @@ for imgNum in range(1, 201):
 
         if brightness < allTimeLow:
             allTimeLow = brightness
-            if allTimeLow <= 1.0: # close enough to zero, use bigger number (like 30) when using jpegs
+            if allTimeLow <= 3.0:
                 found = True
                 sheet.write(imgNum, 0, "%s" % (time.time() - start_time))
                 sheet.write(imgNum, 1, video_path.split(".")[0].split("/")[2])
@@ -122,16 +123,22 @@ book.save("tempsBobAmeliore.xls")
 # (question 3) Notre méthode d'enregistrer des frames si y'a beaucoup de 
 # différence entre la dernière frame enregistrée.
 ###########################################################################
-#
-#vidNum = 0
+
+#vidNum = 49
 #while vidNum <= 50:
 #    vidNum = vidNum + 1
-#    vidcap = cv2.VideoCapture('data/video/v' + str(vidNum) + '.mp4')
+#    if vidNum < 10:
+#        vidcap = cv2.VideoCapture('data/video/v0' + str(vidNum) + '.mp4')
+#    else:
+#        vidcap = cv2.VideoCapture('data/video/v' + str(vidNum) + '.mp4')
 #    frameNum = 0
 #    success, lastFrameCaptured = vidcap.read()
 #    frameNum = frameNum + 1
-#    cv2.imwrite('C:/Users/Efix/Documents/GitHub/INF8770/TP3/data/video/frames/v' + str(vidNum) + '_' + str(frameNum) + '.jpeg', lastFrameCaptured)
-#
+#    if vidNum < 10:
+#        cv2.imwrite('C:/Users/Efix/Documents/GitHub/INF8770/TP3/data/video/frames/v0' + str(vidNum) + '_' + str(frameNum) + '.jpeg', lastFrameCaptured)
+#    else:
+#        cv2.imwrite('C:/Users/Efix/Documents/GitHub/INF8770/TP3/data/video/frames/v' + str(vidNum) + '_' + str(frameNum) + '.jpeg', lastFrameCaptured)
+#    
 #    while True:
 #        success, frame = vidcap.read()
 #
@@ -146,8 +153,11 @@ book.save("tempsBobAmeliore.xls")
 #    
 #        brightness = sum(average_result)
 #    
-#        if brightness >= 100: 
-#            cv2.imwrite('C:/Users/Efix/Documents/GitHub/INF8770/TP3/data/video/frames/v' + str(vidNum) + '_' + str(frameNum) + '.jpeg', frame)
+#        if (vidNum in [1, 7, 8, 43, 50] and brightness >= 45) or (vidNum not in [1, 7, 8, 43, 50] and brightness >= 70):    #ajustements manuels, aussi on enlève certaines frames noires non pertinentes des vidéos
+#            if vidNum < 10:
+#                cv2.imwrite('C:/Users/Efix/Documents/GitHub/INF8770/TP3/data/video/frames/v0' + str(vidNum) + '_' + str(frameNum) + '.jpeg', frame)
+#            else:
+#                cv2.imwrite('C:/Users/Efix/Documents/GitHub/INF8770/TP3/data/video/frames/v' + str(vidNum) + '_' + str(frameNum) + '.jpeg', frame)
 #            lastFrameCaptured = frame
 #
 #        frameNum = frameNum + 1
