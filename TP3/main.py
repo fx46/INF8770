@@ -19,11 +19,11 @@ for imgNum in range(1, 201):
     start_time = time.time()
 
     if imgNum < 10:
-        img = cv2.imread('data/png/i00' + str(imgNum) + '.png') 
+        img = cv2.imread('data/jpeg/i00' + str(imgNum) + '.jpeg') 
     elif imgNum < 100:
-        img = cv2.imread('data/png/i0' + str(imgNum) + '.png') 
+        img = cv2.imread('data/jpeg/i0' + str(imgNum) + '.jpeg') 
     else:
-        img = cv2.imread('data/png/i' + str(imgNum) + '.png') 
+        img = cv2.imread('data/jpeg/i' + str(imgNum) + '.jpeg') 
 
 
     for filename in os.listdir('data/video/frames'):
@@ -49,6 +49,7 @@ for imgNum in range(1, 201):
     frameNum = 0
     found = False
     allTimeLow = 10000
+    allTimeLowFrame = 0
 
     while True:
         frameNum = frameNum + 1
@@ -67,15 +68,19 @@ for imgNum in range(1, 201):
 
         if brightness < allTimeLow:
             allTimeLow = brightness
-            if allTimeLow <= 3.0:
+            allTimeLowFrame = frameNum
+            if brightness <= 30:
                 found = True
-                sheet.write(imgNum, 0, "%s" % (time.time() - start_time))
-                sheet.write(imgNum, 1, video_path.split(".")[0].split("/")[2])
-                sheet.write(imgNum, 2, str(frameNum / fps))
-                print("done!")
-                print("At frame: " + str(frameNum) + ", at second: " + str(frameNum / fps))
-                print("--- %s seconds ---" % (time.time() - start_time))
-                break
+
+        if found and brightness >= 50:
+            break
+
+    sheet.write(imgNum, 0, "%s" % (time.time() - start_time))
+    sheet.write(imgNum, 1, video_path.split(".")[0].split("/")[2])
+    sheet.write(imgNum, 2, str(allTimeLowFrame / fps))
+    print("done!")
+    print("At frame: " + str(allTimeLowFrame) + ", at second: " + str(allTimeLowFrame / fps))
+    print("--- %s seconds ---" % (time.time() - start_time))
 
     if not found:
         print("not found")
