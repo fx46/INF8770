@@ -12,7 +12,7 @@ import xlwt
 book = xlwt.Workbook(encoding="utf-8")
 sheet = book.add_sheet("sheet")
 
-for imgNum in range(1, 201):
+for imgNum in range(6, 201):
     print("finding image: " + str(imgNum))
 
     allTimeLow = 10000
@@ -75,17 +75,19 @@ for imgNum in range(1, 201):
         if found and brightness >= 50:
             break
 
-    sheet.write(imgNum, 0, "%s" % (time.time() - start_time))
-    sheet.write(imgNum, 1, video_path.split(".")[0].split("/")[2])
-    sheet.write(imgNum, 2, str(allTimeLowFrame / fps))
-    print("done!")
-    print("At frame: " + str(allTimeLowFrame) + ", at second: " + str(allTimeLowFrame / fps))
-    print("--- %s seconds ---" % (time.time() - start_time))
+    if found:
+        sheet.write(imgNum, 0, "%s" % (time.time() - start_time))
+        sheet.write(imgNum, 1, video_path.split(".")[0].split("/")[2])
+        sheet.write(imgNum, 2, str(allTimeLowFrame / fps))
+        print("At frame: " + str(allTimeLowFrame) + ", at second: " + str(allTimeLowFrame / fps))
 
     if not found:
         print("not found")
         sheet.write(imgNum, 0, "%s" % (time.time() - start_time))
         sheet.write(imgNum, 1, "not found")
+
+    print("done!")
+    print("--- %s seconds ---" % (time.time() - start_time))
 
 book.save("tempsBobAmeliore.xls")
 
